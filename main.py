@@ -421,7 +421,6 @@ def parse_argv(sys_argv=None):
         args_logging = args_parser.add_mutually_exclusive_group()
         args_logging.add_argument('--silent', action='store_true', help='Disables message output, output called by the --custom-email-api argument will still be output!')
         args_logging.add_argument('--disable-logging', action='store_true', help='Disables logging')
-        args_parser.add_argument('--token', help='Token value')
         parsed_args = None
         captured_stderr = io.StringIO()
         with contextlib.redirect_stderr(captured_stderr):
@@ -524,8 +523,6 @@ def main(disable_exit=False):
         
         # initialization and configuration of everything necessary for work            
         webdriver_path = None
-        token_value = args['token']
-        bot = telebot.TeleBot(token_value, parse_mode='MARKDOWNv2')
         browser_name = GOOGLE_CHROME
         custom_browser_location = None if args['custom_browser_location'] == '' else args['custom_browser_location']
         webdriver_installer = WebDriverInstaller(browser_name, custom_browser_location)
@@ -671,10 +668,6 @@ def main(disable_exit=False):
                         ])
                         full_message = f"{output_linessml}\n\n{important_note}\n\n\n{stay_tuned}\n{mention}\n"
                     
-                    try:
-                        bot.send_message(chat_id=-1002669375057, text=full_message, parse_mode='MARKDOWNv2')
-                    except Exception as e:
-                        print(f"Error sending message: {e}")
                     if args['vpn_codes']:
                         EV_obj = EV(email_obj, DRIVER, ER_obj.window_handle)
                         EV_obj.sendRequestForVPNCodes()
@@ -844,7 +837,3 @@ if __name__ == '__main__':
                     main(disable_exit=True)
             except KeyboardInterrupt:
                 exit_program(0, DRIVER)
-
-
-
-
